@@ -1,15 +1,15 @@
-class AudioContext {
+export class AudioManager {
   private audioContext: AudioContext | null = null;
   private analyser: AnalyserNode | null = null;
-  private dataArray: Uint8Array | null = null;
+  private dataArray: Float32Array | null = null;
   private bufferLength: number = 0;
 
   public initialize() {
-    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    this.audioContext = new window.AudioContext();
     this.analyser = this.audioContext.createAnalyser();
     this.analyser.fftSize = 2048;
     this.bufferLength = this.analyser.frequencyBinCount;
-    this.dataArray = new Uint8Array(this.bufferLength);
+    this.dataArray = new Float32Array(this.bufferLength);
   }
 
   public shutdown() {
@@ -29,17 +29,17 @@ class AudioContext {
     source.connect(this.analyser!);
   }
 
-  public getTimeData(): Uint8Array | null {
+  public getTimeData(): Float32Array | null {
     if (this.analyser && this.dataArray) {
-      this.analyser.getByteTimeDomainData(this.dataArray);
+      this.analyser.getFloatTimeDomainData(this.dataArray);
       return this.dataArray;
     }
     return null;
   }
 
-  public getFrequencyData(): Uint8Array | null {
+  public getFrequencyData(): Float32Array | null {
     if (this.analyser && this.dataArray) {
-      this.analyser.getByteFrequencyData(this.dataArray);
+      this.analyser.getFloatFrequencyData(this.dataArray);
       return this.dataArray;
     }
     return null;
