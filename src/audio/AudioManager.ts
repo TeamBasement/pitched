@@ -5,16 +5,24 @@ export class AudioManager {
   private readonly analyser: AnalyserNode;
   private readonly pitchDetector: PitchDetector<Float32Array>;
   private oscillator: OscillatorNode | null = null;
+  public initialized = false;
 
   public constructor() {
     this.audioContext = new window.AudioContext();
     this.analyser = this.audioContext.createAnalyser();
     this.analyser.fftSize = 2048;
     this.pitchDetector = PitchDetector.forFloat32Array(this.analyser.fftSize);
-    this.analyser.connect(this.audioContext.destination); // DEBUG
+    this.pitchDetector.minVolumeDecibels = -20;
   }
 
-  public initialize() {}
+  public isInitialized() {
+    return this.initialized;
+  }
+
+  public initialize() {
+    this.audioContext.resume();
+    this.initialized = true;
+  }
 
   public shutdown() {
     if (this.audioContext) {

@@ -24,6 +24,7 @@ function App() {
   const [pitch, setPitch] = useState<number | null>(null);
   const [confidence, setConfidence] = useState<number | null>(null);
   const [inputPitch, setInputPitch] = useState<number>(440); // Default to A4
+  const [state, setState] = useState("unstarted");
 
   useEffect(() => {
     const manager = new AudioManager();
@@ -49,7 +50,14 @@ function App() {
 
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div
+        style={{
+          width: "100%",
+          justifyContent: "center",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         <img
           width="100px"
           height="100px"
@@ -67,28 +75,52 @@ function App() {
         <p>Confidence: {confidence ? (confidence * 100).toFixed(2) : "N/A"}%</p>
         <NearestNote pitch={pitch} />
       </div>
-      <div>
-        <label htmlFor="pitch-slider">Input Pitch:</label>
-        <span style={{ display: "inline-block", width: "60px" }}>
-          {inputPitch} Hz
-        </span>
-        <input
-          id="pitch-slider"
-          type="range"
-          min="20"
-          max="2000"
-          value={inputPitch}
-          onChange={(e) => setInputPitch(Number(e.target.value))}
-        />
-      </div>
-      <button
-        onClick={() => {
-          audioManager?.initialize();
-          audioManager?.debug_connectSineWave();
-        }}
-      >
-        Begin
-      </button>
+
+      {state == "sine-wave" ? (
+        <div>
+          <div>
+            <label htmlFor="pitch-slider">Input Pitch:</label>
+            <span style={{ display: "inline-block", width: "60px" }}>
+              {inputPitch} Hz
+            </span>
+            <input
+              id="pitch-slider"
+              type="range"
+              min="20"
+              max="2000"
+              value={inputPitch}
+              onChange={(e) => setInputPitch(Number(e.target.value))}
+            />
+          </div>
+        </div>
+      ) : null}
+
+      {state == "unstarted" ? (
+        <div>
+          <div>
+            <button
+              onClick={() => {
+                audioManager?.initialize();
+                audioManager?.debug_connectSineWave();
+                setState("sine-wave");
+              }}
+            >
+              Begin with Sine Wave
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                audioManager?.initialize();
+                audioManager?.beginListening();
+                setState("microphone");
+              }}
+            >
+              Begin with Microphone
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
