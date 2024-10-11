@@ -49,5 +49,11 @@ export class AudioManager {
     return { pitch, confidence };
   }
 
-  public debug_connectSineWave() {}
+  public debug_connectSineWave() {
+    const oscillator = this.audioContext.createOscillator();
+    oscillator.type = 'sine'; // Set the waveform type to sine
+    oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime); // Set frequency to 440 Hz (A4)
+    oscillator.connect(this.analyser);
+    oscillator.start();
+  }
 }
