@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { expect, describe, it, vi } from "vitest";
 
 import App from "./App";
@@ -13,7 +14,7 @@ describe("App", () => {
 
     render(<App />);
     const button = screen.getByText(/Begin/i);
-    fireEvent.click(button);
+    userEvent.click(button);
 
     expect(mockInitialize).toHaveBeenCalled();
   });
