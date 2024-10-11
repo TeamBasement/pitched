@@ -3,7 +3,6 @@ import { PitchDetector } from "pitchy";
 export class AudioManager {
   private readonly audioContext: AudioContext;
   private readonly analyser: AnalyserNode;
-  private readonly dataArray: Float32Array;
   private readonly pitchDetector: PitchDetector<Float32Array>;
   private readonly bufferLength: number = 0;
 
@@ -12,7 +11,6 @@ export class AudioManager {
     this.analyser = this.audioContext.createAnalyser();
     this.analyser.fftSize = 2048;
     this.bufferLength = this.analyser.frequencyBinCount;
-    this.dataArray = new Float32Array(this.bufferLength);
     this.pitchDetector = PitchDetector.forFloat32Array(this.analyser.fftSize);
   }
 
@@ -31,13 +29,15 @@ export class AudioManager {
   }
 
   public getTimeData(): Float32Array {
-    this.analyser.getFloatTimeDomainData(this.dataArray);
-    return this.dataArray;
+    const data = new Float32Array(this.analyser.fftSize);
+    this.analyser.getFloatTimeDomainData(data);
+    return data;
   }
 
   public getFrequencyData(): Float32Array {
-    this.analyser.getFloatFrequencyData(this.dataArray);
-    return this.dataArray;
+    const data = new Float32Array(this.analyser.frequencyBinCount);
+    this.analyser.getFloatFrequencyData(data);
+    return data;
   }
 
   public getPitch(): { pitch: number; confidence: number } {

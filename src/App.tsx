@@ -10,22 +10,25 @@ function App() {
   useEffect(() => {
     const audioManager = new AudioManager();
     setAudioManager(audioManager);
-    
+    return () => {
+      audioManager.shutdown();
+    };
+  }, []);
+
+  useEffect(() => {
+    let id: number;
     const updatePitch = () => {
       if (audioManager) {
         const { pitch, confidence } = audioManager.getPitch();
         setPitch(pitch);
         setConfidence(confidence);
       }
-      requestAnimationFrame(updatePitch);
+      id = requestAnimationFrame(updatePitch);
+      return id;
     };
-
-    updatePitch();
-
-    return () => {
-      audioManager.shutdown();
-    };
-  }, []);
+    id = updatePitch();
+    return () => cancelAnimationFrame(id);
+  }, [audioManager]);
 
   return (
     <div>
@@ -38,6 +41,7 @@ function App() {
         <p>Current Pitch: {pitch ? pitch.toFixed(2) : "N/A"} Hz</p>
         <p>Confidence: {confidence ? (confidence * 100).toFixed(2) : "N/A"}%</p>
       </div>
+      <button
         onClick={() => {
           audioManager?.initialize();
           audioManager?.debug_connectSineWave();
