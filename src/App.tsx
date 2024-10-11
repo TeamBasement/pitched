@@ -16,18 +16,16 @@ function App() {
   }, []);
 
   useEffect(() => {
-    let id: number;
+    let intervalId: NodeJS.Timeout;
     const updatePitch = () => {
       if (audioManager) {
         const { pitch, confidence } = audioManager.getPitch();
         setPitch(pitch);
         setConfidence(confidence);
       }
-      id = requestAnimationFrame(updatePitch);
-      return id;
     };
-    id = updatePitch();
-    return () => cancelAnimationFrame(id);
+    intervalId = setInterval(updatePitch, 100);
+    return () => clearInterval(intervalId);
   }, [audioManager]);
 
   return (
