@@ -4,11 +4,27 @@ import { AudioManager } from "./audio/AudioManager";
 
 function App() {
   const [audioManager, setAudioManager] = useState<AudioManager | null>(null);
+  const [pitch, setPitch] = useState<number | null>(null);
+  const [confidence, setConfidence] = useState<number | null>(null);
 
   useEffect(() => {
     const audioManager = new AudioManager();
     setAudioManager(audioManager);
-    return () => audioManager.shutdown();
+    
+    const updatePitch = () => {
+      if (audioManager) {
+        const { pitch, confidence } = audioManager.getPitch();
+        setPitch(pitch);
+        setConfidence(confidence);
+      }
+      requestAnimationFrame(updatePitch);
+    };
+
+    updatePitch();
+
+    return () => {
+      audioManager.shutdown();
+    };
   }, []);
 
   return (
@@ -18,7 +34,10 @@ function App() {
         Welcome to Pitched, an app that plays with pitch detection and
         replication.
       </p>
-      <button
+      <div>
+        <p>Current Pitch: {pitch ? pitch.toFixed(2) : "N/A"} Hz</p>
+        <p>Confidence: {confidence ? (confidence * 100).toFixed(2) : "N/A"}%</p>
+      </div>
         onClick={() => {
           audioManager?.initialize();
           audioManager?.debug_connectSineWave();
