@@ -43,6 +43,10 @@ function App() {
     return () => clearInterval(intervalId);
   }, [audioManager]);
 
+  useEffect(() => {
+    audioManager?.debug_updateSineWaveFrequency(inputPitch);
+  }, [inputPitch, audioManager]);
+
   return (
     <div>
       <h1>Pitched</h1>
@@ -57,7 +61,7 @@ function App() {
       </div>
       <div>
         <label htmlFor="pitch-slider">Input Pitch:</label>
-        <span style={{ display: 'inline-block', width: '60px' }}>
+        <span style={{ display: "inline-block", width: "60px" }}>
           {inputPitch} Hz
         </span>
         <input
@@ -72,7 +76,7 @@ function App() {
       <button
         onClick={() => {
           audioManager?.initialize();
-          audioManager?.debug_connectSineWave(80);
+          audioManager?.debug_connectSineWave();
         }}
       >
         Begin
