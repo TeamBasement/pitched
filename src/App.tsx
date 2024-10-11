@@ -4,17 +4,24 @@ import { AudioManager } from "./audio/AudioManager";
 import { nearestNote } from "./audio/utils";
 
 const NearestNote: React.FC<{ pitch: number | null }> = ({ pitch }) => {
-  if (!pitch) {
-    return null;
-  }
   const { name, pitch: notePitch } = nearestNote(pitch ?? 0);
 
   return (
     <div>
       <p>
-        Nearest Note: {name} ({notePitch} Hz)
+        Nearest Note:{" "}
+        {pitch ? (
+          <>
+            {name} ({notePitch} Hz)
+          </>
+        ) : (
+          "N/A"
+        )}
       </p>
-      <p>Note Difference: {(pitch - notePitch).toFixed(2)} Hz</p>
+      <p>
+        Note Difference:{" "}
+        {pitch ? <>{(pitch - notePitch).toFixed(2)} Hz</> : "N/A"}
+      </p>
     </div>
   );
 };

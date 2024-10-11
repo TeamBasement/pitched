@@ -69,6 +69,7 @@ export class AudioManager {
       this.audioContext.currentTime
     ); // Set frequency to 440 Hz (A4)
     this.oscillator.connect(this.analyser);
+    this.oscillator.connect(this.audioContext.destination);
     this.oscillator.start();
   }
 
