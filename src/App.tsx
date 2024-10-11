@@ -23,6 +23,7 @@ function App() {
   const [audioManager, setAudioManager] = useState<AudioManager | null>(null);
   const [pitch, setPitch] = useState<number | null>(null);
   const [confidence, setConfidence] = useState<number | null>(null);
+  const [inputPitch, setInputPitch] = useState<number>(440); // Default to A4
 
   useEffect(() => {
     const manager = new AudioManager();
@@ -54,7 +55,17 @@ function App() {
         <p>Confidence: {confidence ? (confidence * 100).toFixed(2) : "N/A"}%</p>
         <NearestNote pitch={pitch} />
       </div>
-      <button
+      <div>
+        <label htmlFor="pitch-slider">Input Pitch: {inputPitch} Hz</label>
+        <input
+          id="pitch-slider"
+          type="range"
+          min="20"
+          max="2000"
+          value={inputPitch}
+          onChange={(e) => setInputPitch(Number(e.target.value))}
+        />
+      </div>
         onClick={() => {
           audioManager?.initialize();
           audioManager?.debug_connectSineWave(80);
