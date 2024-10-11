@@ -56,7 +56,8 @@ function App() {
         <NearestNote pitch={pitch} />
       </div>
       <div>
-        <label htmlFor="pitch-slider">Input Pitch: {inputPitch} Hz</label>
+        <label htmlFor="pitch-slider">Input Pitch:</label>
+        <span>{inputPitch} Hz</span>
         <input
           id="pitch-slider"
           type="range"
