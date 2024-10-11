@@ -18,7 +18,14 @@ function App() {
         Welcome to Pitched, an app that plays with pitch detection and
         replication.
       </p>
-      <button onClick={() => audioManager?.initialize()}>Begin</button>
+      <button
+        onClick={() => {
+          audioManager?.initialize();
+          audioManager?.debug_connectSineWave();
+        }}
+      >
+        Begin
+      </button>
     </div>
   );
 }
