@@ -57,7 +57,9 @@ function App() {
       </div>
       <div>
         <label htmlFor="pitch-slider">Input Pitch:</label>
-        <span>{inputPitch} Hz</span>
+        <span style={{ display: 'inline-block', width: '60px' }}>
+          {inputPitch} Hz
+        </span>
         <input
           id="pitch-slider"
           type="range"
