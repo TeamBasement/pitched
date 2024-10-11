@@ -66,6 +66,7 @@ function App() {
           onChange={(e) => setInputPitch(Number(e.target.value))}
         />
       </div>
+      <button
         onClick={() => {
           audioManager?.initialize();
           audioManager?.debug_connectSineWave(80);
