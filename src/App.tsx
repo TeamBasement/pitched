@@ -49,15 +49,15 @@ function App() {
 
   return (
     <div>
-      <h1>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <img
           width="100px"
           height="100px"
           src="pitched-clean.webp"
           alt="Pitched Logo"
         />
-        Pitched
-      </h1>
+        <h1 style={{ margin: "0 0 0 10px" }}>Pitched</h1>
+      </div>
       <p>
         Welcome to Pitched, an app that plays with pitch detection and
         replication.
