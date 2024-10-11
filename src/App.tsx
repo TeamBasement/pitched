@@ -16,7 +16,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
     const updatePitch = () => {
       if (audioManager) {
         const { pitch, confidence } = audioManager.getPitch();
@@ -24,7 +23,7 @@ function App() {
         setConfidence(confidence);
       }
     };
-    intervalId = setInterval(updatePitch, 100);
+    const intervalId = setInterval(updatePitch, 100);
     return () => clearInterval(intervalId);
   }, [audioManager]);
 
