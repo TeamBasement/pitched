@@ -1,6 +1,23 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { AudioManager } from "./audio/AudioManager";
+import { nearestNote } from "./audio/utils";
+
+const NearestNote: React.FC<{ pitch: number | null }> = ({ pitch }) => {
+  if (!pitch) {
+    return null;
+  }
+  const { name, pitch: notePitch } = nearestNote(pitch ?? 0);
+
+  return (
+    <div>
+      <p>
+        Nearest Note: {name} ({notePitch} Hz)
+      </p>
+      <p>Note Difference: {(pitch - notePitch).toFixed(2)} Hz</p>
+    </div>
+  );
+};
 
 function App() {
   const [audioManager, setAudioManager] = useState<AudioManager | null>(null);
@@ -8,11 +25,9 @@ function App() {
   const [confidence, setConfidence] = useState<number | null>(null);
 
   useEffect(() => {
-    const audioManager = new AudioManager();
-    setAudioManager(audioManager);
-    return () => {
-      audioManager.shutdown();
-    };
+    const manager = new AudioManager();
+    setAudioManager(manager);
+    return () => manager.shutdown();
   }, []);
 
   useEffect(() => {
@@ -37,11 +52,12 @@ function App() {
       <div>
         <p>Current Pitch: {pitch ? pitch.toFixed(2) : "N/A"} Hz</p>
         <p>Confidence: {confidence ? (confidence * 100).toFixed(2) : "N/A"}%</p>
+        <NearestNote pitch={pitch} />
       </div>
       <button
         onClick={() => {
           audioManager?.initialize();
-          audioManager?.debug_connectSineWave();
+          audioManager?.debug_connectSineWave(80);
         }}
       >
         Begin
